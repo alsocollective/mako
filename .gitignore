@@ -5,4 +5,5 @@
 *.svg
 *.svgz
 *.gif
+.DS_Store
 envr/*
