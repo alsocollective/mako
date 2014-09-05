@@ -15,11 +15,22 @@ matplotlib
 Old Instructions
 =====
 
-== Install ==
+== Install Plots ==
 
-* NetCDF
 * Matplotlib
 * Numpy
+* NetCDF
+? h5py
+? cython
+? nose
+? scipy
+
+
+== Other ==
+
+* SVGCompress
+* shapely
+
 
 virtualenv== install that
 
