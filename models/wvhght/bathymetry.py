@@ -47,17 +47,24 @@ elif gmt > 12:
 
 
 
-url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/"+lake+"/fcfmrc-2d/files/"+filename
+#url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/"+lake+"/fcfmrc-2d/files/"+filename
 #url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/archivecurrent/huron/ncfmrc-2d/files/h201423212.out1.nc"
 
-#url = "ontario_lld.grd"
+url = "ontario_lld.grd"
 
-url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/huron/fcfmrc-2d/files/h201423212.out1.nc"
+#url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/ontario/fcfmrc-2d/files/o201423212.out1.nc"
 
 # Forecast
 # A201423212.out1.nc
 # A, 2014, 232, 12
 # lake, Y, DOY(Julian), H(GMT), .out?, Dimensions .nc (extension)
+
+nc = netCDF4.Dataset(url)
+
+print nc.variables.keys()
+print "===="
+print nc.variables['z']
+
 
 try:
 	nc = netCDF4.Dataset(url)
@@ -78,17 +85,20 @@ except RuntimeError:
 
 # print(cl.OKBLUE+datetime.datetime.fromtimestamp(int(nc.variables['time'][0])).strftime('%Y-%m-%d %H:%M:%S')+cl.ENDC + " - " + cl.OKGREEN+datetime.datetime.fromtimestamp(int(nc.variables['time'][119])).strftime('%Y-%m-%d %H:%M:%S')+cl.ENDC)
 
-G_x = nc.variables['lon']
-G_y = nc.variables['lat']
-G_z = nc.variables['wvh']
+G_x = nc.variables['x']
+G_y = nc.variables['y']
+G_z = nc.variables['z']
 
 #OR THIS!
 #G_z = ndimage.gaussian_filter(nc.variables['wvh'],sigma=0.25, order=0, mode="constant",cval=0.5)
 
 G = {} # dictionary ~ Matlab struct
-G['x'] = G_x[:].squeeze()
-G['y'] = G_y[:].squeeze()
-G['z'] = G_z[:,:,:].squeeze() # download only one temporal slice
+G['x'] = G_x[:]
+G['y'] = G_y[:]
+G['z'] = G_z[:,:] # download only one temporal slice
+
+low = np.amin(G['z'])
+high = np.amax(G['z'])
  
 # represent fillValue from data as Masked Array
 # the next release of netcdf4 will return a masked array by default, handling NaNs
@@ -99,46 +109,23 @@ G['z'] = G_z[:,:,:].squeeze() # download only one temporal slice
 # OR THIS!!!!
 G['z'] = ndimage.gaussian_filter(np.ma.masked_invalid(G['z']),sigma=0.25, order=0,mode="constant",cval=0.5)
 
+# make image
+# plt.figure(figsize=(10,10))
+# plt.imshow(topo,origin='lower')
+# plt.title(nc.title)
+# plt.savefig('../Output2/image%d.png'%counter, bbox_inches=0)
+fig = plt.figure(frameon=False)
+#plt.contourf(G['x'],G['y'],topo,origin='lower')
+clevs = np.arange(low, 5, 5)
+# plot SLP contours
+# cs = plt.contourf(G['x'],G['y'],topo,clevs,linewidths=1,cmp='jet')
+plt.axis('tight')
+plt.axis('equal')
+plt.axis('off')
+plt.contour(G['x'],G['y'],G['z'],clevs,linewidths=0.2,cmp="gist_rainbow",origin='lower')
+#CS2 = plt.contourf(G['x'],G['y'],topo,cmap='jet')
+#plt.clabel(CS, inline=1, fontsize=5)
 
-nc.close()
-
-counter = 0
-
-for dat in G['z']:
-
-	topo = dat
-
-	def nf(value):
-		feet = value*3.28084
-		return int(feet)
-
-	# make image
-	# plt.figure(figsize=(10,10))
-	# plt.imshow(topo,origin='lower')
-	# plt.title(nc.title)
-	# plt.savefig('../Output2/image%d.png'%counter, bbox_inches=0)
-	fig = plt.figure(frameon=False)
-
-	clevs = np.arange(0.0, 10.0, 0.05)
-
-	cs = plt.contour(G['x'],G['y'],topo,clevs,cmp='gist_rainbow')
-	#plt.contourf(G['x'],G['y'],topo,origin='lower')
-
-	cs.levels = [nf(val) for val in cs.levels]
-
-	# plot SLP contours
-	# cs = plt.contourf(G['x'],G['y'],topo,clevs,linewidths=1,cmp='jet')
-	
-	#CS2 = plt.contourf(G['x'],G['y'],topo,cmap='jet')
-	
-	plt.clabel(cs, cs.levels, inline=1, fontsize=5)
-	#plt.axis('tight')
-	plt.axis('equal')
-	plt.axis('off')
-	fig.savefig('../output/ontario/waves%d.svg'%counter,bbox_inches='tight')
-
-	plt.close()
-
-	counter += 1
+fig.savefig('../output/ontario-bathymetry.svg')
 
 exit()
