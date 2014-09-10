@@ -4,10 +4,15 @@ import numpy as np
 import matplotlib.cm as cm
 import matplotlib.mlab as mlab
 import matplotlib.ticker as ticker
+import matplotlib.colors as mcolors
 import netCDF4
 #import pydap
 import datetime
 import scipy.ndimage as ndimage
+
+def nf(value):
+	feet = value*3.28084
+	return int(feet)
 
 class cl:
     HEADER = '\033[95m'
@@ -37,22 +42,21 @@ doy = datetime.datetime.now().timetuple().tm_yday
 
 if gmt < 12:
 
-	filename = ("o"+""+utc.strftime("%Y")+"%d"%doy+"00.out1.nc")
-	lake = "ontario"
+	filename = ("h"+""+utc.strftime("%Y")+"%d"%doy+"00.out1.nc")
+	lake = "huron"
 
 elif gmt > 12:
 
-	filename = ("o"+""+utc.strftime("%Y")+"%d"%doy+"12.out1.nc")
-	lake = "ontario"
+	filename = ("h"+""+utc.strftime("%Y")+"%d"%doy+"12.out1.nc")
+	lake = "huron"
 
+#url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/"+lake+"/fcfmrc-2d/files/"+filename
 
+#FORECAST
+#url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/huron/fcfmrc-2d/files/h201425212.out1.nc"
 
-url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/"+lake+"/fcfmrc-2d/files/"+filename
-#url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/archivecurrent/huron/ncfmrc-2d/files/h201423212.out1.nc"
-
-#url = "ontario_lld.grd"
-
-url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/huron/fcfmrc-2d/files/h201423212.out1.nc"
+#NOWCAST
+url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/archivecurrent/huron/ncfmrc-2d/files/h201425306.out1.nc"
 
 # Forecast
 # A201423212.out1.nc
@@ -70,17 +74,25 @@ except RuntimeError:
 	print "File not found"
 	print "---------------"+cl.ENDC
 
+	print "Pooling for previous model"
+
+
 
 
 # print nc.variables.keys()
 # print '----'
-# print len(nc.variables['time']),"hours" #120 hours returns UNIX Timestamp format
+#print len(nc.variables['time']),"hours" #120 hours returns UNIX Timestamp format
 
-# print(cl.OKBLUE+datetime.datetime.fromtimestamp(int(nc.variables['time'][0])).strftime('%Y-%m-%d %H:%M:%S')+cl.ENDC + " - " + cl.OKGREEN+datetime.datetime.fromtimestamp(int(nc.variables['time'][119])).strftime('%Y-%m-%d %H:%M:%S')+cl.ENDC)
+#print(cl.OKBLUE+datetime.datetime.fromtimestamp(int(nc.variables['time'][0])).strftime('%Y-%m-%d %H:%M:%S')+cl.ENDC + " - " + cl.OKGREEN+datetime.datetime.fromtimestamp(int(nc.variables['time'][119])).strftime('%Y-%m-%d %H:%M:%S')+cl.ENDC)
+
+print nc.variables.keys()
+
+print nc.variables['time'][0]
 
 G_x = nc.variables['lon']
 G_y = nc.variables['lat']
 G_z = nc.variables['wvh']
+G_time = nc.variables['time']
 
 #OR THIS!
 #G_z = ndimage.gaussian_filter(nc.variables['wvh'],sigma=0.25, order=0, mode="constant",cval=0.5)
@@ -99,6 +111,8 @@ G['z'] = G_z[:,:,:].squeeze() # download only one temporal slice
 # OR THIS!!!!
 G['z'] = ndimage.gaussian_filter(np.ma.masked_invalid(G['z']),sigma=0.25, order=0,mode="constant",cval=0.5)
 
+sigHeight = nf(np.amax(G['z']))
+print sigHeight
 
 nc.close()
 
@@ -108,10 +122,6 @@ for dat in G['z']:
 
 	topo = dat
 
-	def nf(value):
-		feet = value*3.28084
-		return int(feet)
-
 	# make image
 	# plt.figure(figsize=(10,10))
 	# plt.imshow(topo,origin='lower')
@@ -119,9 +129,11 @@ for dat in G['z']:
 	# plt.savefig('../Output2/image%d.png'%counter, bbox_inches=0)
 	fig = plt.figure(frameon=False)
 
-	clevs = np.arange(0.0, 10.0, 0.05)
+	print datetime.datetime.fromtimestamp(G_time['time'][counter]).strftime('%Y-%m-%d %H:%M:%S')
 
-	cs = plt.contour(G['x'],G['y'],topo,clevs,cmp='gist_rainbow')
+	clevs = np.arange(0.0, 20, 0.25)	
+
+	cs = plt.contourf(G['x'],G['y'],topo,clevs,cmp='jet')
 	#plt.contourf(G['x'],G['y'],topo,origin='lower')
 
 	cs.levels = [nf(val) for val in cs.levels]
@@ -131,11 +143,11 @@ for dat in G['z']:
 	
 	#CS2 = plt.contourf(G['x'],G['y'],topo,cmap='jet')
 	
-	plt.clabel(cs, cs.levels, inline=1, fontsize=5)
+	#plt.clabel(cs, cs.levels, inline=1, fontsize=5)
 	#plt.axis('tight')
 	plt.axis('equal')
 	plt.axis('off')
-	fig.savefig('../output/ontario/waves%d.svg'%counter,bbox_inches='tight')
+	fig.savefig('../output/nowcast/waves-%d-hrs.svg'%counter,bbox_inches='tight')
 
 	plt.close()
 
