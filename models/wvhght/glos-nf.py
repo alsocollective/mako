@@ -15,7 +15,7 @@ import simplejson as json
 def mkdir_p(path):
     try:
         os.makedirs(path)
-    except OSError as exc: # Python >2.5
+    except OSError as exc:
         if exc.errno == errno.EEXIST and os.path.isdir(path):
             pass
         else: raise
@@ -36,10 +36,10 @@ class cl:
 #url = 'http://tds.glos.us/thredds/dodsC/glos/glcfs/erie/fcfmrc-2d/files/e201400100.out1.nc'
 #url = 'http://tds.glos.us/thredds/dodsC/glos/glcfs/huron/fcfmrc-2d/files/h201422712.out1.nc'
 
-with open("text.json", "w") as outfile:
-    json.dump({'numbers':"XCCCCWWCWW"}, outfile, indent=4)
+# with open("text.json", "w") as outfile:
+#     json.dump({'numbers':"XCCCCWWCWW"}, outfile, indent=4)
 
-    exit()
+#     exit()
 
 utc = datetime.datetime.utcnow() 
 gmt = utc.strftime("%Y")
@@ -92,6 +92,12 @@ dayof = nc.validtime_DOY.split(",")
 dayof = int(dayof[0])
 
 mkdir_p("../output/%d"%dayof)
+
+glosJson = open("%d-json.json"%dayof,"w")
+
+json.dump({'numbers':"XCCCCWWCWW"}, glosJson, indent=4)
+
+exit()
 
 # print '----'
 #print len(nc.variables['time']),"hours" #120 hours returns UNIX Timestamp format
