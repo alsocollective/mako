@@ -5,6 +5,7 @@
 *.tiff
 *.svg
 *.svgz
+*.nc
 *.gif
 .DS_Store
 envr/*

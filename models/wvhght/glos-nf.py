@@ -9,6 +9,16 @@ import netCDF4
 #import pydap
 import datetime
 import scipy.ndimage as ndimage
+import os, errno
+import simplejson as json
+
+def mkdir_p(path):
+    try:
+        os.makedirs(path)
+    except OSError as exc: # Python >2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        else: raise
 
 def nf(value):
 	feet = value*3.28084
@@ -26,6 +36,11 @@ class cl:
 #url = 'http://tds.glos.us/thredds/dodsC/glos/glcfs/erie/fcfmrc-2d/files/e201400100.out1.nc'
 #url = 'http://tds.glos.us/thredds/dodsC/glos/glcfs/huron/fcfmrc-2d/files/h201422712.out1.nc'
 
+with open("text.json", "w") as outfile:
+    json.dump({'numbers':"XCCCCWWCWW"}, outfile, indent=4)
+
+    exit()
+
 utc = datetime.datetime.utcnow() 
 gmt = utc.strftime("%Y")
 
@@ -34,9 +49,6 @@ lakes = ["ontario","huron","erie","superior","michigan"]
 # for num in lakes:
 
 # 	print num
-
-
-# exit()
 
 doy = datetime.datetime.now().timetuple().tm_yday
 
@@ -53,13 +65,10 @@ elif gmt > 12:
 #url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/"+lake+"/fcfmrc-2d/files/"+filename
 
 #FORECAST
-#url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/huron/fcfmrc-2d/files/h201425412.out1.nc"
+url = "../../testdata/tds.glos.us/thredds/dodsC/glos/glcfs/ontario/fcfmrc-2d/files/o201425012.out1.nc"
 
 #NOWCAST
-#url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/archivecurrent/huron/ncfmrc-2d/files/h201425400.out1.nc"
-#url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/archivecurrent/huron/ncfmrc-2d/files/h201425406.out1.nc"
-#url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/archivecurrent/huron/ncfmrc-2d/files/h201425412.out1.nc"
-#url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/archivecurrent/huron/ncfmrc-2d/files/h201425418.out1.nc"
+#url = "../../testdata/tds.glos.us/thredds/dodsC/glos/glcfs/archivecurrent/ontario/ncfmrc-2d/files/o201425018.out1.nc"
 
 # Forecast
 # A201423212.out1.nc
@@ -79,10 +88,11 @@ except RuntimeError:
 
 	print "Pooling for previous model"
 
+dayof = nc.validtime_DOY.split(",")
+dayof = int(dayof[0])
 
+mkdir_p("../output/%d"%dayof)
 
-
-# print nc.variables.keys()
 # print '----'
 #print len(nc.variables['time']),"hours" #120 hours returns UNIX Timestamp format
 
@@ -96,9 +106,6 @@ G_x = nc.variables['lon']
 G_y = nc.variables['lat']
 G_z = nc.variables['wvh']
 G_time = nc.variables['time']
-
-#OR THIS!
-#G_z = ndimage.gaussian_filter(nc.variables['wvh'],sigma=0.25, order=0, mode="constant",cval=0.5)
 
 G = {} # dictionary ~ Matlab struct
 G['x'] = G_x[:].squeeze()
@@ -120,6 +127,8 @@ G['z'] = ndimage.gaussian_filter(np.ma.masked_invalid(G['z']),sigma=0.25, order=
 # sigHeight = nf(np.amax(G['z']))
 
 # print "Significant Waves:",sigHeight
+
+exit()
 
 counter = 0
 
@@ -160,7 +169,7 @@ for dat in G['z']:
 	#fig.savefig('../output/nowcast/%d-'%day +time+'_Nwv_'+date+'.svg', bbox_inches='tight')
 
 	#FORE
-	fig.savefig('../output/nowcast/%d-'%day +time+'_Fwv_'+date+'.svg', bbox_inches='tight')
+	fig.savefig('../output/%d-'%day +time+'_Fwv_'+date+'.svg', bbox_inches='tight')
 
 	plt.close()
 
