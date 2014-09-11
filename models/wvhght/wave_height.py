@@ -56,7 +56,8 @@ elif gmt > 12:
 #url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/huron/fcfmrc-2d/files/h201425212.out1.nc"
 
 #NOWCAST
-url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/archivecurrent/huron/ncfmrc-2d/files/h201425306.out1.nc"
+url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/archivecurrent/huron/ncfmrc-2d/files/h201425406.out1.nc"
+
 
 # Forecast
 # A201423212.out1.nc
@@ -101,7 +102,10 @@ G = {} # dictionary ~ Matlab struct
 G['x'] = G_x[:].squeeze()
 G['y'] = G_y[:].squeeze()
 G['z'] = G_z[:,:,:].squeeze() # download only one temporal slice
- 
+G['t'] = G_time[:].squeeze()
+
+nc.close()
+
 # represent fillValue from data as Masked Array
 # the next release of netcdf4 will return a masked array by default, handling NaNs
 # correctly too (http://code.google.com/p/netcdf4-python/issues/detail?id=168)
@@ -112,9 +116,8 @@ G['z'] = G_z[:,:,:].squeeze() # download only one temporal slice
 G['z'] = ndimage.gaussian_filter(np.ma.masked_invalid(G['z']),sigma=0.25, order=0,mode="constant",cval=0.5)
 
 sigHeight = nf(np.amax(G['z']))
-print sigHeight
 
-nc.close()
+print "Significant Waves:",sigHeight
 
 counter = 0
 
@@ -129,7 +132,7 @@ for dat in G['z']:
 	# plt.savefig('../Output2/image%d.png'%counter, bbox_inches=0)
 	fig = plt.figure(frameon=False)
 
-	print datetime.datetime.fromtimestamp(G_time['time'][counter]).strftime('%Y-%m-%d %H:%M:%S')
+	print (datetime.datetime.fromtimestamp(G['t'][counter]).strftime('%Y-%m-%d %H:%M:%S'))
 
 	clevs = np.arange(0.0, 20, 0.25)	
 
