@@ -49,7 +49,7 @@ lakes = ["ontario","huron","erie","superior","michigan"]
 #FORECAST - TestData
 #url = "../../testdata/tds.glos.us/thredds/dodsC/glos/glcfs/ontario/fcfmrc-2d/files/o201425012.out1.nc"
 
-url = "https://tds.glos.us/thredds/dodsC/glos/glcfs/ontario/fcfmrc-2d/files/o201425012.out1.nc"
+url = "https://tds.glos.us/thredds/dodsC/glos/glcfs/huron/fcfmrc-2d/files/h201425012.out1.nc"
 
 #NOWCAST - TestData
 #url = "../../testdata/tds.glos.us/thredds/dodsC/glos/glcfs/archivecurrent/ontario/ncfmrc-2d/files/o201425018.out1.nc"
@@ -75,20 +75,21 @@ G_time = nc.variables['time']
 G = {} # dictionary ~ Matlab struct
 G['x'] = G_x[:].squeeze()
 G['y'] = G_y[:].squeeze()
-G['z'] = G_z[:5,:,:].squeeze() # download only one temporal slice
+G['z'] = G_z[:,:,:].squeeze() # download only one temporal slice
 G['t'] = G_time[:].squeeze()
 
 nc.close()
 
-#G['z'] = np.ma.masked_invalid(G['z'])
-
 G['z'] = ndimage.gaussian_filter(np.ma.masked_invalid(G['z']),sigma=0.25, order=0,mode="constant",cval=0.5)
 
-# sigHeight = nf(np.amax(G['z']))
-
-# print "Significant Waves:",sigHeight
-
 counter = 0
+
+out = {
+	'hours':[],
+	'wvh':[],
+	'paths':[],
+	'age':[]
+}
 
 for dat in G['z']:
 
@@ -109,12 +110,19 @@ for dat in G['z']:
 
 	wvhModel = "%d-"%day +time+"_wv_"+date+".svg"
 
-	fig.savefig('../output/ontario/'+wvhModel+'.svg', bbox_inches='tight')
+	fig.savefig('../output/ontario/%d/'%dayof +wvhModel, bbox_inches='tight')
 
-	json.dump({'waves-path':wvhModel}, glosJson, indent=4)
+	print '../output/ontario/%d/'%dayof +wvhModel
+
+	out['hours'].append(int(G['t'][counter]))
+	out['wvh'].append(nf(np.amax(G['z'][counter])))
+	out['paths'].append(str("/models/output/ontario/%d/"%dayof +wvhModel))
+	out['age'].append(str(day))
 
 	plt.close()
 
 	counter += 1
+
+json.dump(out, glosJson, indent=4)
 
 exit()
