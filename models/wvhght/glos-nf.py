@@ -75,7 +75,7 @@ G_time = nc.variables['time']
 G = {} # dictionary ~ Matlab struct
 G['x'] = G_x[:].squeeze()
 G['y'] = G_y[:].squeeze()
-G['z'] = G_z[:,:,:].squeeze() # download only one temporal slice
+G['z'] = G_z[:5,:,:].squeeze() # download only one temporal slice
 G['t'] = G_time[:].squeeze()
 
 nc.close()
