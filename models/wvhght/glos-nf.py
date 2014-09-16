@@ -49,7 +49,7 @@ lakes = ["ontario","huron","erie","superior","michigan"]
 #FORECAST - TestData
 #url = "../../testdata/tds.glos.us/thredds/dodsC/glos/glcfs/ontario/fcfmrc-2d/files/o201425012.out1.nc"
 
-url = "https://tds.glos.us/thredds/dodsC/glos/glcfs/huron/fcfmrc-2d/files/h201425012.out1.nc"
+url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/huron/fcfmrc-2d/files/h201425900.out1.nc"
 
 #NOWCAST - TestData
 #url = "../../testdata/tds.glos.us/thredds/dodsC/glos/glcfs/archivecurrent/ontario/ncfmrc-2d/files/o201425018.out1.nc"
@@ -75,7 +75,7 @@ G_time = nc.variables['time']
 G = {} # dictionary ~ Matlab struct
 G['x'] = G_x[:].squeeze()
 G['y'] = G_y[:].squeeze()
-G['z'] = G_z[:5,:,:].squeeze() # download only one temporal slice
+G['z'] = G_z[:,:,:].squeeze() # download only one temporal slice
 G['t'] = G_time[:].squeeze()
 
 nc.close()
@@ -108,7 +108,8 @@ for dat in G['z']:
 	plt.axis('equal')
 	plt.axis('off')
 
-	wvhModel = "%d-"%day +time+"_wv_"+date+".svg"
+	#wvhModel = "%d-"%day +time+"_wv_"+date+".svg"
+	wvhModel = "%d-"%counter +".svg"
 
 	fig.savefig('../output/ontario/%d/'%dayof +wvhModel, bbox_inches='tight')
 

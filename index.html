@@ -49,25 +49,19 @@
 
 		var myVar = setInterval(function(){myTimer()}, 250);
 
-		var divs = document.getElementsByTagName("div");
+		//var divs = document.getElementsByTagName("div");
 
 		function myTimer() {
 
-			back = i - 1;
-
-			//divs[i].setAttribute("class","hidden");
-
-			divs[i].className = divs[i].className + " hidden";
-
-			
-
-			if(i >= divs.length) {
+			if(i < 119){
+				i++
+			}else if(i === 119){
 				i = 0;
 			}
 
-			//divs[back].setAttribute("class","");
+			console.log(i);
 
-		    i++
+			document.getElementById("svgs").className = "stk-"+i+"-";
 		}
 
 		// var divs = document.getElementsByTagName("div");
@@ -81,7 +75,7 @@
 
 	</script>
 
-	<link rel="stylesheet" type="text/css" href="output/assets/stack.css">
+	<link rel="stylesheet" type="text/css" href="output/assets/stk.css">
 
 	<style>
 
@@ -106,11 +100,13 @@
 	<body>
 
 		<h1>SVG Compactor</h1>
-		<div class="stack-250-09_wv_09-07-14"></div>
-		<div class="stack-250-10_wv_09-07-14"></div>
+		<div id="svgs" class=""></div>
+		<!-- <div class="stack-250-10_wv_09-07-14"></div>
 		<div class="stack-250-11_wv_09-07-14"></div>
 		<div class="stack-250-12_wv_09-07-14"></div>
-		<div class="stack-250-13_wv_09-07-14"></div>
+		<div class="stack-250-13_wv_09-07-14"></div> -->
+
+		<!-- <div class="stack-250-09_wv_09-07-14"></div> -->
 
 	</body>
 </html>

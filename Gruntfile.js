@@ -7,7 +7,7 @@ grunt.initConfig({
     all: {
       source: 'output',
       target: 'output',
-      outputname: 'stack'
+      outputname: 'stk'
     }
   },
   
