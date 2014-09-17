@@ -6,6 +6,7 @@ import datetime
 import scipy.ndimage as ndimage
 import os, errno
 import simplejson as json
+from matplotlib.colors import LogNorm
 
 def mkdir_p(path):
     try:
@@ -49,7 +50,7 @@ lakes = ["ontario","huron","erie","superior","michigan"]
 #FORECAST - TestData
 #url = "../../testdata/tds.glos.us/thredds/dodsC/glos/glcfs/ontario/fcfmrc-2d/files/o201425012.out1.nc"
 
-url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/huron/fcfmrc-2d/files/h201425900.out1.nc"
+url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/huron/fcfmrc-2d/files/h201426000.out1.nc"
 
 #NOWCAST - TestData
 #url = "../../testdata/tds.glos.us/thredds/dodsC/glos/glcfs/archivecurrent/ontario/ncfmrc-2d/files/o201425018.out1.nc"
@@ -75,7 +76,7 @@ G_time = nc.variables['time']
 G = {} # dictionary ~ Matlab struct
 G['x'] = G_x[:].squeeze()
 G['y'] = G_y[:].squeeze()
-G['z'] = G_z[:,:,:].squeeze() # download only one temporal slice
+G['z'] = G_z[:5,:,:].squeeze() # download only one temporal slice
 G['t'] = G_time[:].squeeze()
 
 nc.close()
@@ -101,8 +102,12 @@ for dat in G['z']:
 	day = (datetime.datetime.fromtimestamp(G['t'][counter]).timetuple().tm_yday)
 	time = (datetime.datetime.fromtimestamp(G['t'][counter]).strftime('%H'))
 
-	clevs = np.arange(0.0, 20, 0.25)
-	cs = plt.contourf(G['x'],G['y'],topo,clevs,cmp='jet')
+	clevs = np.arange(0.0, 30.0, 0.25)
+
+	#clevs = [0.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0]
+	#cs = plt.contourf(G['x'],G['y'],topo,clevs,cmp='jet')
+	cs = plt.contourf(G['x'],G['y'],topo,levels=clevs,cmap="jet",norm=LogNorm())
+	#plt.clim(0.0,20)
 	cs.levels = [nf(val) for val in cs.levels]
 
 	plt.axis('equal')
@@ -111,7 +116,7 @@ for dat in G['z']:
 	#wvhModel = "%d-"%day +time+"_wv_"+date+".svg"
 	wvhModel = "%d-"%counter +".svg"
 
-	fig.savefig('../output/ontario/%d/'%dayof +wvhModel, bbox_inches='tight')
+	fig.savefig('../output/ontario/%d/'%dayof +wvhModel, bbox_inches='tight',transparent=True,pad_inches=0)
 
 	print '../output/ontario/%d/'%dayof +wvhModel
 

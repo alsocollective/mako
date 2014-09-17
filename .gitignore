@@ -9,4 +9,6 @@
 *.gif
 .DS_Store
 envr/*
-node_modules/*
+node_modules/
+stk.css
+assets/
