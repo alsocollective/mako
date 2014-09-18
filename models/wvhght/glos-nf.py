@@ -50,7 +50,7 @@ lakes = ["ontario","huron","erie","superior","michigan"]
 #FORECAST - TestData
 #url = "../../testdata/tds.glos.us/thredds/dodsC/glos/glcfs/ontario/fcfmrc-2d/files/o201425012.out1.nc"
 
-url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/huron/fcfmrc-2d/files/h201426000.out1.nc"
+url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/huron/fcfmrc-2d/files/h201425212.out1.nc"
 
 #NOWCAST - TestData
 #url = "../../testdata/tds.glos.us/thredds/dodsC/glos/glcfs/archivecurrent/ontario/ncfmrc-2d/files/o201425018.out1.nc"
@@ -76,10 +76,14 @@ G_time = nc.variables['time']
 G = {} # dictionary ~ Matlab struct
 G['x'] = G_x[:].squeeze()
 G['y'] = G_y[:].squeeze()
-G['z'] = G_z[:5,:,:].squeeze() # download only one temporal slice
+G['z'] = G_z[:,:,:].squeeze() # download only one temporal slice
 G['t'] = G_time[:].squeeze()
 
 nc.close()
+
+high = nf(np.amax(G['z']))
+
+print high
 
 G['z'] = ndimage.gaussian_filter(np.ma.masked_invalid(G['z']),sigma=0.25, order=0,mode="constant",cval=0.5)
 
@@ -102,19 +106,27 @@ for dat in G['z']:
 	day = (datetime.datetime.fromtimestamp(G['t'][counter]).timetuple().tm_yday)
 	time = (datetime.datetime.fromtimestamp(G['t'][counter]).strftime('%H'))
 
-	clevs = np.arange(0.0, 30.0, 0.25)
+	#clevs = np.arange(0.0, 30.0, 0.25)
+	clevs = np.arange(0.0, 5.0, 0.5)
+	#clevs = np.linspace(0.0, 5.0, 15, endpoint=True)
+	#clevs = np.logspace(0.0, 5.0, )
 
-	#clevs = [0.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0]
-	#cs = plt.contourf(G['x'],G['y'],topo,clevs,cmp='jet')
-	cs = plt.contourf(G['x'],G['y'],topo,levels=clevs,cmap="jet",norm=LogNorm())
+	cs = plt.contourf(G['x'],G['y'],topo,clevs,cmp='winter')
+	#cs = plt.contourf(G['x'],G['y'],topo,cmap="jet")
 	#plt.clim(0.0,20)
 	cs.levels = [nf(val) for val in cs.levels]
+	#plt.clabel(cs, fontsize=9, inline=1)
 
 	plt.axis('equal')
 	plt.axis('off')
 
+	cbar = plt.colorbar(cs, ticks=clevs)
+	#cbar.set_xticklabels(['Low', 'Medium', 'High'])# horizontal colorbar
+
+	#plt.colorbar()
+
 	#wvhModel = "%d-"%day +time+"_wv_"+date+".svg"
-	wvhModel = "%d-"%counter +".svg"
+	wvhModel = "%d-"%counter +"%d"%nf(np.amax(G['z'][counter]))+".svg"
 
 	fig.savefig('../output/ontario/%d/'%dayof +wvhModel, bbox_inches='tight',transparent=True,pad_inches=0)
 
