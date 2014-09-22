@@ -50,7 +50,7 @@ lakes = ["ontario","huron","erie","superior","michigan"]
 #FORECAST - TestData
 #url = "../../testdata/tds.glos.us/thredds/dodsC/glos/glcfs/ontario/fcfmrc-2d/files/o201425012.out1.nc"
 
-url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/huron/fcfmrc-2d/files/h201425212.out1.nc"
+url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/huron/fcfmrc-2d/files/h201426312.out1.nc"
 
 #NOWCAST - TestData
 #url = "../../testdata/tds.glos.us/thredds/dodsC/glos/glcfs/archivecurrent/ontario/ncfmrc-2d/files/o201425018.out1.nc"
@@ -76,7 +76,7 @@ G_time = nc.variables['time']
 G = {} # dictionary ~ Matlab struct
 G['x'] = G_x[:].squeeze()
 G['y'] = G_y[:].squeeze()
-G['z'] = G_z[:,:,:].squeeze() # download only one temporal slice
+G['z'] = G_z[:9,:,:].squeeze() # download only one temporal slice
 G['t'] = G_time[:].squeeze()
 
 nc.close()
@@ -107,7 +107,7 @@ for dat in G['z']:
 	time = (datetime.datetime.fromtimestamp(G['t'][counter]).strftime('%H'))
 
 	#clevs = np.arange(0.0, 30.0, 0.25)
-	clevs = np.arange(0.0, 5.0, 0.5)
+	clevs = np.arange(0.0, 5.0, 0.3048)
 	#clevs = np.linspace(0.0, 5.0, 15, endpoint=True)
 	#clevs = np.logspace(0.0, 5.0, )
 
@@ -119,6 +119,8 @@ for dat in G['z']:
 
 	plt.axis('equal')
 	plt.axis('off')
+
+	cs = set_clim([5, 50])
 
 	cbar = plt.colorbar(cs, ticks=clevs)
 	#cbar.set_xticklabels(['Low', 'Medium', 'High'])# horizontal colorbar
