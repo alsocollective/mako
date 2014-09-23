@@ -108,7 +108,7 @@ for dat in G['z']:
 
 	#clevs = np.arange(0.0, 30.0, 0.25)
 	#clevs = np.arange(0.0, 9.14400, 0.3048)
-	clevs = np.arange(0.0, 5, 0.3048)
+	clevs = np.arange(0.0, 5, 0.762)
 	#clevs = np.linspace(0.0, 5.0, 15, endpoint=True)
 	#clevs = np.logspace(0.0, 5.0, )
 
