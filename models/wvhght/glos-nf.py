@@ -6,7 +6,7 @@ import datetime
 import scipy.ndimage as ndimage
 import os, errno
 import simplejson as json
-from matplotlib.colors import LogNorm
+import matplotlib.colors as col
 
 def mkdir_p(path):
     try:
@@ -107,11 +107,14 @@ for dat in G['z']:
 	time = (datetime.datetime.fromtimestamp(G['t'][counter]).strftime('%H'))
 
 	#clevs = np.arange(0.0, 30.0, 0.25)
-	clevs = np.arange(0.0, 5.0, 0.3048)
+	#clevs = np.arange(0.0, 9.14400, 0.3048)
+	clevs = np.arange(0.0, 5, 0.3048)
 	#clevs = np.linspace(0.0, 5.0, 15, endpoint=True)
 	#clevs = np.logspace(0.0, 5.0, )
 
-	cs = plt.contourf(G['x'],G['y'],topo,clevs,cmp='winter')
+	norm = col.BoundaryNorm(clevs, 256)
+
+	cs = plt.contourf(G['x'],G['y'],topo,clevs,cmap='bone',norm=norm, vmin=0, vmax=9.14400)
 	#cs = plt.contourf(G['x'],G['y'],topo,cmap="jet")
 	#plt.clim(0.0,20)
 	cs.levels = [nf(val) for val in cs.levels]
@@ -120,7 +123,7 @@ for dat in G['z']:
 	plt.axis('equal')
 	plt.axis('off')
 
-	cs = set_clim([5, 50])
+	cs.set_clim([0, 5])
 
 	cbar = plt.colorbar(cs, ticks=clevs)
 	#cbar.set_xticklabels(['Low', 'Medium', 'High'])# horizontal colorbar
