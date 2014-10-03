@@ -50,7 +50,9 @@ lakes = ["ontario","huron","erie","superior","michigan"]
 #FORECAST - TestData
 #url = "../../testdata/tds.glos.us/thredds/dodsC/glos/glcfs/ontario/fcfmrc-2d/files/o201425012.out1.nc"
 
-url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/huron/fcfmrc-2d/files/h201426312.out1.nc"
+url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/michigan/fcfmrc-2d/files/m201426312.out1.nc"
+
+#url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/ontario/fcfmrc-2d/files/o201426312.out1.nc"
 
 #NOWCAST - TestData
 #url = "../../testdata/tds.glos.us/thredds/dodsC/glos/glcfs/archivecurrent/ontario/ncfmrc-2d/files/o201425018.out1.nc"
@@ -74,9 +76,9 @@ G_z = nc.variables['wvh']
 G_time = nc.variables['time']
 
 G = {} # dictionary ~ Matlab struct
-G['x'] = G_x[:].squeeze()
+G['x'] = G_x[:].squeeze() #WHAT IS SQUEEZE?
 G['y'] = G_y[:].squeeze()
-G['z'] = G_z[:9,:,:].squeeze() # download only one temporal slice
+G['z'] = G_z[:2,:,:].squeeze() # download only one temporal slice
 G['t'] = G_time[:].squeeze()
 
 nc.close()
@@ -85,7 +87,7 @@ high = nf(np.amax(G['z']))
 
 print high
 
-G['z'] = ndimage.gaussian_filter(np.ma.masked_invalid(G['z']),sigma=0.25, order=0,mode="constant",cval=0.5)
+G['z'] = ndimage.gaussian_filter(np.ma.masked_invalid(G['z']),sigma=0.0005, order=0, mode="nearest", cval=0.05)
 
 counter = 0
 
@@ -96,11 +98,41 @@ out = {
 	'age':[]
 }
 
+#fig = plt.figure(frameon=False)
+
+#ONTARIO
+#fig = plt.figure(figsize=(7.195, 2.841), dpi=30, frameon=False)
+
+#SUPERIOR
+#fig = plt.figure(figsize=(6.195, 2.941), dpi=30, frameon=False)
+
+#HURON
+#fig = plt.figure(figsize=(3.2, 2.941), dpi=30, frameon=False)
+
+#ERIE
+#fig = plt.figure(figsize=(3.941, 1.741), dpi=30, frameon=False)
+
+#MICHIGAN
+#fig = plt.figure(figsize=(2.441, 4.195), dpi=30, frameon=False)
+
+
+
+
+figOntW = 0.46
+figOntH = 1.2
+
+figSupW = 0.46
+figSupH = 0
+
+
 for dat in G['z']:
 
 	topo = dat
 
-	fig = plt.figure(frameon=False)
+#	fig.set_size_inches(fig.get_size_inches()[1]/fig_ratio, fig.get_size_inches()[1])
+
+	#fig.set_size_inches(fig.get_size_inches()[0]/figOntW, fig.get_size_inches()[1])
+	#fig.set_size_inches(fig.get_size_inches()[1]/figOntW, fig.get_size_inches()[1]/figOntH)
 
 	date = (datetime.datetime.fromtimestamp(G['t'][counter]).strftime('%m-%d-%y'))
 	day = (datetime.datetime.fromtimestamp(G['t'][counter]).timetuple().tm_yday)
@@ -108,24 +140,27 @@ for dat in G['z']:
 
 	#clevs = np.arange(0.0, 30.0, 0.25)
 	#clevs = np.arange(0.0, 9.14400, 0.3048)
-	clevs = np.arange(0.0, 5, 0.762)
+	clevs = np.arange(0.0, 5, 0.3048)
 	#clevs = np.linspace(0.0, 5.0, 15, endpoint=True)
 	#clevs = np.logspace(0.0, 5.0, )
 
 	norm = col.BoundaryNorm(clevs, 256)
 
-	cs = plt.contourf(G['x'],G['y'],topo,clevs,cmap='bone',norm=norm, vmin=0, vmax=9.14400)
+	#cs = plt.contourf(G['x'],G['y'],topo,clevs,cmap='bone',norm=norm, vmin=0, vmax=9.14400)
+	
+	cs = plt.contourf(G['x'],G['y'],topo,clevs,cmap='PuBuGn')
+	
 	#cs = plt.contourf(G['x'],G['y'],topo,cmap="jet")
 	#plt.clim(0.0,20)
 	cs.levels = [nf(val) for val in cs.levels]
 	#plt.clabel(cs, fontsize=9, inline=1)
 
-	plt.axis('equal')
+	#plt.axis('equal')
 	plt.axis('off')
 
 	cs.set_clim([0, 5])
 
-	cbar = plt.colorbar(cs, ticks=clevs)
+	#cbar = plt.colorbar(cs, ticks=clevs)
 	#cbar.set_xticklabels(['Low', 'Medium', 'High'])# horizontal colorbar
 
 	#plt.colorbar()
