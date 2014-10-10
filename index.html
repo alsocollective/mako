@@ -41,27 +41,46 @@
 		// 	}
 		// });
 
-	var i = 0;
+	var j = 0;
 
 	$(document).ready(function() {
 		console.log("READY!");
 
+            var element = document.getElementById("main");
 
-		var myVar = setInterval(function(){myTimer()}, 250);
+            for (i=0; i<120; i++) {
+                var d = document.createElement("img");
+                element.appendChild(d);
+                d.style.visibility = "hidden";
+                d.src = "/models/output/ontario/280/"+i+"-.png";
+                d.id = "m-"+i;
+            }
+
+
+		var myVar = setInterval(function(){myTimer()}, 150);
 
 		//var divs = document.getElementsByTagName("div");
 
 		function myTimer() {
 
-			if(i < 119){
-				i++
-			}else if(i === 119){
-				i = 0;
+			if(j < 119){
+				j++
+			}else if(j === 119){
+				j = 0;
 			}
 
-			//console.log(i);
+			console.log(j);
 
-			document.getElementById("svgs").className = "stk-"+i+"-";
+			document.getElementById(("m-"+j).toString()).style.visibility = "hidden";
+
+			document.getElementById("hrs").innerHTML = ("h: "+j).toString();
+
+			if(j+1 === 120) {
+				console.log("NOPE!");
+				document.getElementById(("m-0").toString()).style.visibility = "visible";
+			}else {
+				document.getElementById(("m-"+(j+1)).toString()).style.visibility = "visible";
+			}
 		}
 
 		// var divs = document.getElementsByTagName("div");
@@ -75,20 +94,23 @@
 
 	</script>
 
-	<link rel="stylesheet" type="text/css" href="output/assets/stk.css">
+	<!-- <link rel="stylesheet" type="text/css" href="output/assets/stk.css"> -->
 
 	<style>
 
 		body, html {
-			width:100%;
-			height:100%;
-			background-color: #333;
-		}
-		div {
-			position: absolute;
 			width: 100%;
 			height: 100%;
-			opacity: 0.5;
+			background-color: #333;
+			color: #eee;
+			font-family: sans-serif;
+		}
+
+		div {
+			position: absolute;
+			width: 70%;
+			height: 100%;
+			/*opacity: 0.5;*/
 
 			background: no-repeat center center fixed; 
 	  		-webkit-background-size: cover;
@@ -97,18 +119,28 @@
 	  		background-size: cover;
 		}
 
+		img {
+			width: 100%;
+			height: auto;
+			position: absolute;
+		}
+
 	</style>
 
 	<body>
 
-		<h1>SVG Compactor</h1>
-		<div id="svgs" class=""></div>
-		<!-- <div class="stack-250-10_wv_09-07-14"></div>
-		<div class="stack-250-11_wv_09-07-14"></div>
-		<div class="stack-250-12_wv_09-07-14"></div>
-		<div class="stack-250-13_wv_09-07-14"></div> -->
+		<h1>STG Demo</h1>
 
-		<!-- <div class="stack-250-09_wv_09-07-14"></div> -->
+		<h2 id="hrs"></h2>
+
+		<div id="main">
+
+
+
+
+			<!-- <img id="m-0" style="visibility: hidden;" src="/models/output/ontario/280/0-5.png"/><img id="m-1" style="visibility: hidden;" src="/models/output/ontario/280/1-6.png"/><img id="m-2" style="visibility: hidden;" src="/models/output/ontario/280/2-6.png"/><img id="m-3" style="visibility: hidden;" src="/models/output/ontario/280/3-7.png"/><img id="m-4" style="visibility: hidden;" src="/models/output/ontario/280/4-8.png"/> -->
+		</div>
+		<!-- <div id="svgs" class=""></div> -->
 
 	</body>
 </html>

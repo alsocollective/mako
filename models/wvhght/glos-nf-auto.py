@@ -31,11 +31,15 @@ class cl:
 utc = datetime.datetime.utcnow() 
 gmt = utc.strftime("%Y")
 
-lakes = ["ontario","huron","erie","superior","michigan"]
+#lakes = ["ontario","huron","erie","superior","michigan"]
+
+lakes = ["erie"]
+
+furl = "http://tds.glos.us/thredds/dodsC/glos/glcfs/huron/fcfmrc-2d/files/h201428012.out1.nc"
 
 # for num in lakes:
 
-# 	#### These should be functions!
+# # 	#### These should be functions!
 
 # 	doy = datetime.datetime.now().timetuple().tm_yday
 
@@ -47,18 +51,8 @@ lakes = ["ontario","huron","erie","superior","michigan"]
 # 		filename = (num[0]+""+utc.strftime("%Y")+"%d"%doy+"12.out1.nc")
 # 		furl = "https://tds.glos.us/thredds/dodsC/glos/glcfs/"+num+"/fcfmrc-2d/files/"+filename
 
-#FORECAST - TestData
-#url = "../../testdata/tds.glos.us/thredds/dodsC/glos/glcfs/ontario/fcfmrc-2d/files/o201425012.out1.nc"
-
-url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/michigan/fcfmrc-2d/files/m201426312.out1.nc"
-
-#url = "http://tds.glos.us/thredds/dodsC/glos/glcfs/ontario/fcfmrc-2d/files/o201426312.out1.nc"
-
-#NOWCAST - TestData
-#url = "../../testdata/tds.glos.us/thredds/dodsC/glos/glcfs/archivecurrent/ontario/ncfmrc-2d/files/o201425018.out1.nc"
-
 try:
-	nc = netCDF4.Dataset(url)
+	nc = netCDF4.Dataset(furl)
 	print cl.OKGREEN+"--------\nSuccess!\n--------"+cl.ENDC
 
 except RuntimeError:
@@ -78,7 +72,7 @@ G_time = nc.variables['time']
 G = {} # dictionary ~ Matlab struct
 G['x'] = G_x[:].squeeze() #WHAT IS SQUEEZE?
 G['y'] = G_y[:].squeeze()
-G['z'] = G_z[:2,:,:].squeeze() # download only one temporal slice
+G['z'] = G_z[:,:,:].squeeze() # download only one temporal slice
 G['t'] = G_time[:].squeeze()
 
 nc.close()
@@ -98,57 +92,50 @@ out = {
 	'age':[]
 }
 
-#fig = plt.figure(frameon=False)
 
-#ONTARIO
-#fig = plt.figure(figsize=(7.195, 2.841), dpi=30, frameon=False)
-
-#SUPERIOR
-#fig = plt.figure(figsize=(6.195, 2.941), dpi=30, frameon=False)
-
-#HURON
-#fig = plt.figure(figsize=(3.2, 2.941), dpi=30, frameon=False)
 
 #ERIE
-#fig = plt.figure(figsize=(3.941, 1.741), dpi=30, frameon=False)
+
 
 #MICHIGAN
-#fig = plt.figure(figsize=(2.441, 4.195), dpi=30, frameon=False)
-
-
-
-
-figOntW = 0.46
-figOntH = 1.2
-
-figSupW = 0.46
-figSupH = 0
 
 
 for dat in G['z']:
 
 	topo = dat
 
-#	fig.set_size_inches(fig.get_size_inches()[1]/fig_ratio, fig.get_size_inches()[1])
-
-	#fig.set_size_inches(fig.get_size_inches()[0]/figOntW, fig.get_size_inches()[1])
-	#fig.set_size_inches(fig.get_size_inches()[1]/figOntW, fig.get_size_inches()[1]/figOntH)
-
 	date = (datetime.datetime.fromtimestamp(G['t'][counter]).strftime('%m-%d-%y'))
 	day = (datetime.datetime.fromtimestamp(G['t'][counter]).timetuple().tm_yday)
 	time = (datetime.datetime.fromtimestamp(G['t'][counter]).strftime('%H'))
 
-	#clevs = np.arange(0.0, 30.0, 0.25)
-	#clevs = np.arange(0.0, 9.14400, 0.3048)
-	clevs = np.arange(0.0, 5, 0.3048)
-	#clevs = np.linspace(0.0, 5.0, 15, endpoint=True)
-	#clevs = np.logspace(0.0, 5.0, )
+	#fig = plt.figure(frameon=False)
+
+	#ONTARIO
+	#fig = plt.figure(figsize=(7.195, 2.841), dpi=30, frameon=False)
+
+	#SUPERIOR
+	#fig = plt.figure(figsize=(6.195, 2.941), dpi=30, frameon=False)
+
+	#HURON
+	fig = plt.figure(figsize=(3.2*2, 2.941*2), dpi=72, frameon=False)
+
+	#ERIE
+	#fig = plt.figure(figsize=(3.941, 1.741), dpi=30, frameon=False)
+
+	#MICHIGAN
+	#fig = plt.figure(figsize=(2.441, 4.195), dpi=30, frameon=False)
+	
+
+	#clevs = np.arange(0.0, 5, 0.3048)
+	clevs = np.arange(0.0, 5, 0.01)
 
 	norm = col.BoundaryNorm(clevs, 256)
 
 	#cs = plt.contourf(G['x'],G['y'],topo,clevs,cmap='bone',norm=norm, vmin=0, vmax=9.14400)
 	
-	cs = plt.contourf(G['x'],G['y'],topo,clevs,cmap='PuBuGn')
+	cs = plt.contour(G['x'],G['y'],topo,clevs,cmap='jet', linewidths=0.5)
+
+	#fig.spines['top'].set_visible(False)
 	
 	#cs = plt.contourf(G['x'],G['y'],topo,cmap="jet")
 	#plt.clim(0.0,20)
@@ -166,7 +153,9 @@ for dat in G['z']:
 	#plt.colorbar()
 
 	#wvhModel = "%d-"%day +time+"_wv_"+date+".svg"
-	wvhModel = "%d-"%counter +"%d"%nf(np.amax(G['z'][counter]))+".svg"
+	#wvhModel = "%d-"%counter +"%d"%nf(np.amax(G['z'][counter]))+".png"
+
+	wvhModel = "%d-.png"%counter
 
 	fig.savefig('../output/ontario/%d/'%dayof +wvhModel, bbox_inches='tight',transparent=True,pad_inches=0)
 
