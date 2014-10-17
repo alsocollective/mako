@@ -35,7 +35,7 @@ gmt = utc.strftime("%Y")
 
 lakes = ["erie"]
 
-furl = "http://tds.glos.us/thredds/dodsC/glos/glcfs/huron/fcfmrc-2d/files/h201428012.out1.nc"
+furl = "http://tds.glos.us/thredds/dodsC/glos/glcfs/huron/fcfmrc-2d/files/h201429012.out1.nc"
 
 # for num in lakes:
 
@@ -126,14 +126,14 @@ for dat in G['z']:
 	#fig = plt.figure(figsize=(2.441, 4.195), dpi=30, frameon=False)
 	
 
-	#clevs = np.arange(0.0, 5, 0.3048)
-	clevs = np.arange(0.0, 5, 0.01)
+	clevs = np.arange(0.0, 5, 0.3048)
+	#clevs = np.arange(0.0, 5, 0.01)
 
 	norm = col.BoundaryNorm(clevs, 256)
 
-	#cs = plt.contourf(G['x'],G['y'],topo,clevs,cmap='bone',norm=norm, vmin=0, vmax=9.14400)
+	cs = plt.contourf(G['x'],G['y'],topo,clevs,cmap='bone',norm=norm, vmin=0, vmax=9.14400)
 	
-	cs = plt.contour(G['x'],G['y'],topo,clevs,cmap='jet', linewidths=0.5)
+	#cs = plt.contour(G['x'],G['y'],topo,clevs,cmap='jet', linewidths=0.5)
 
 	#fig.spines['top'].set_visible(False)
 	
