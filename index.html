@@ -1,100 +1,58 @@
 <html>
 	<head>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="jquery.nouislider.min.js"></script>
+		<link href="jquery.nouislider.css" rel="stylesheet">
 	</head>
 
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script>
-
-		//Globals
-
-		// var json = (function () {
-		// 	var json = null;
-		// 	$.ajax({
-		// 		'async': false,
-		// 		'global': false,
-		// 		'url': "models/output/ontario/250/o-250.json",
-		// 		'dataType': "json",
-		// 		'success': function (data) {
-		//     		json = data;
-		// 		}
-		// 	});
-		// 	return json;
-		// })();
-
-		// console.log("Async call to json: ")
-		// console.log(json)
-
-		// $(document).ready(function() {
-  //   		console.log( "ready!" );
-
-		// 	for(i=0; i < json.wvh.length; i++){
-		// 		console.log(i);
-
-		// 		var svgobj = document.createElement('object');
-
-		// 		svgobj.setAttribute("id",i);
-		// 		svgobj.setAttribute("data",json.paths[i]);
-
-		// 		var elem = document.getElementById("main_container");
-
-		// 		elem.appendChild(svgobj);
-		// 	}
-		// });
 
 	var j = 0;
 
 	$(document).ready(function() {
 		console.log("READY!");
 
-            var element = document.getElementById("main");
+		$(function(){
 
-            for (i=0; i<120; i++) {
-                var d = document.createElement("img");
-                element.appendChild(d);
-                d.style.visibility = "hidden";
-                d.src = "/models/output/ontario/280/"+i+"-.png";
-                d.id = "m-"+i;
-            }
+			$('#slider-step').noUiSlider({
+				start: [ 0 ],
+				step: 1,
+				range: {
+					'min': [0],
+					'max': [119]
+				}
+			});
+			console.log($("#slider-step").val());
+			document.getElementById("m-0").style.visibility = "visible";
+		});
 
 
-		var myVar = setInterval(function(){myTimer()}, 150);
+		$("#slider-step").on({
 
-		//var divs = document.getElementsByTagName("div");
-
-		function myTimer() {
-
-			if(j < 119){
-				j++
-			}else if(j === 119){
-				j = 0;
+			slide: function(){
+				var slideVal = parseInt($(this).val());
+				$("img[style^='visibility: visible']").each(function(){this.style.visibility = "hidden";})
+				document.getElementById("m-"+slideVal).style.visibility = "visible";
+				document.getElementById("hrs").innerHTML = ("h: "+slideVal).toString();
+			},
+			set: function(){
+			},
+			change: function(){
 			}
+		});
 
-			console.log(j);
+        var element = document.getElementById("main");
 
-			document.getElementById(("m-"+j).toString()).style.visibility = "hidden";
-
-			document.getElementById("hrs").innerHTML = ("h: "+j).toString();
-
-			if(j+1 === 120) {
-				console.log("NOPE!");
-				document.getElementById(("m-0").toString()).style.visibility = "visible";
-			}else {
-				document.getElementById(("m-"+(j+1)).toString()).style.visibility = "visible";
-			}
-		}
-
-		// var divs = document.getElementsByTagName("div");
-		// 	for(var i = 0; i < divs.length; i++){
-	 //   		//do something to each div like
-	 //   		divs[i].innerHTML = "something new...";
-		// }
-
-
+        for (i=0; i<120; i++) {
+            var d = document.createElement("img");
+            element.appendChild(d);
+            d.style.visibility = "hidden";
+            d.src = "/models/output/ontario/290/"+i+"-.png";
+            d.id = "m-"+i;
+        }
 	});
 
 	</script>
-
-	<!-- <link rel="stylesheet" type="text/css" href="output/assets/stk.css"> -->
 
 	<style>
 
@@ -104,43 +62,53 @@
 			background-color: #333;
 			color: #eee;
 			font-family: sans-serif;
+			text-align: center;
+			margin: 0;
+			padding: 0;
 		}
 
-		div {
-			position: absolute;
-			width: 70%;
-			height: 100%;
+		#main {
+			/*position: absolute;*/
+			/*width: 40%;*/
+			/*height: 100%;*/
 			/*opacity: 0.5;*/
+			/*margin: 0;
+			padding: 0;
 
 			background: no-repeat center center fixed; 
 	  		-webkit-background-size: cover;
 	  		-moz-background-size: cover;
 	  		-o-background-size: cover;
-	  		background-size: cover;
+	  		background-size: cover;*/
 		}
 
 		img {
-			width: 100%;
+			width: 60%;
 			height: auto;
 			position: absolute;
+			top:0px;
+			left:0px;
+		}
+
+		#slider {
+			position: fixed;
+			width: 100%;
+			height: 60px;
+			bottom: 0px;
+			left: 0px;
 		}
 
 	</style>
 
 	<body>
 
-		<h1>STG Demo</h1>
+		<!-- <h1>STG Demo</h1>
+		<h2 id="hrs"></h2> -->
 
-		<h2 id="hrs"></h2>
+		<div id="main"></div>
 
-		<div id="main">
-
-
-
-
-			<!-- <img id="m-0" style="visibility: hidden;" src="/models/output/ontario/280/0-5.png"/><img id="m-1" style="visibility: hidden;" src="/models/output/ontario/280/1-6.png"/><img id="m-2" style="visibility: hidden;" src="/models/output/ontario/280/2-6.png"/><img id="m-3" style="visibility: hidden;" src="/models/output/ontario/280/3-7.png"/><img id="m-4" style="visibility: hidden;" src="/models/output/ontario/280/4-8.png"/> -->
+		<div id="slider">
+			<div id="slider-step"></div>
 		</div>
-		<!-- <div id="svgs" class=""></div> -->
-
 	</body>
 </html>
