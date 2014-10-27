@@ -10,5 +10,6 @@
 .DS_Store
 envr/*
 node_modules/
+noaa-data/
 stk.css
 assets/
