@@ -39,20 +39,16 @@ def nf(value):
 
 def getData(lakeName, dayOfYear, hourGMT):
 
-	lake = lakeName
-	day = dayOfYear
-	hour = hourGMT
+	url = "https://tds.glos.us/thredds/dodsC/glos/glcfs/%s/fcfmrc-2d/files/%s2014%s%s.out1.nc"%(lakeName,lakeName[0],dayOfYear,hourGMT)
 
-	# url = "https://tds.glos.us/thredds/dodsC/glos/glcfs/"+lake+"/fcfmrc-2d/files/"+lake[0]+"2014"+day+hour+".out1.nc"
-
-	url = "https://noaa-data/"+lake[0]+"2014"+day+hour+".out1.nc"
+	#url = "https://noaa-data/"+lake[0]+"2014"+day+hour+".out1.nc"
 
 	dictData = {}
 
 	try:
 		#Use NetCDF 4 to download the dataset into memory
 		nc = netCDF4.Dataset(url)
-		print cl.OKGREEN+"--------\n"+lake+" Success!\n--------"+cl.ENDC
+		print cl.OKGREEN+"-------------------\n"+lakeName+" Success!\n-------------------"+cl.ENDC
 
 	except RuntimeError:
 		print cl.FAIL+"--------------\nFile not found\n--------------"+cl.ENDC
@@ -76,14 +72,13 @@ def getData(lakeName, dayOfYear, hourGMT):
 	return dictData
 
 
-
 def completeLakes(ont,sup,hur,eri,mic):
 
 	counter = 0
 
 	print "Writing Combined Lakes..."
 
-	for topo in lake1['z']:
+	for topo in ont['z']:
 
 		fig = plt.figure(frameon=False)
 
@@ -117,11 +112,17 @@ def completeLakes(ont,sup,hur,eri,mic):
 
 def singleLake(lake):
 
+	print lake
+
 	print "this was called but nothing happend"
 
 	# Folders
 	# Maybe a JSON
 	# PNG needs to be optimized
+
+	# get lake name
+	# make lake folder
+
 
 
 
@@ -136,13 +137,13 @@ mic = getData("michigan","290","12")
 completeLakes(ont,sup,hur,eri,mic)
 
 
-# lakes = [ont,sup,hur,eri,mic]
+# lakes = [ont,sup]
 
 # for num in lakes:
 
-# 	print "Writing Single Lakes..."
+#  	print "Writing Single Lakes..."
 
-# 	singleLake(num)
+#  	singleLake(num)
 
 
 exit()
