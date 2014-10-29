@@ -39,9 +39,13 @@ def nf(value):
 
 def getData(lakeName, dayOfYear, hourGMT):
 
-	url = "https://tds.glos.us/thredds/dodsC/glos/glcfs/%s/fcfmrc-2d/files/%s2014%s%s.out1.nc"%(lakeName,lakeName[0],dayOfYear,hourGMT)
+	#url = "https://tds.glos.us/thredds/dodsC/glos/glcfs/%s/fcfmrc-2d/files/%s2014%s%s.out1.nc"%(lakeName,lakeName[0],dayOfYear,hourGMT)
 
-	#url = "https://noaa-data/"+lake[0]+"2014"+day+hour+".out1.nc"
+	url = "https://tds.glos.us/thredds/dodsC/glos/glcfs/"+lake+"/fcfmrc-2d/files/"+lake[0]+"2014"+day+hour+".out1.nc"
+
+
+	#LOCAL
+	# url = "https://noaa-data/"+lake[0]+"2014"+day+hour+".out1.nc"
 
 	dictData = {}
 
