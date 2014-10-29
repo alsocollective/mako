@@ -43,9 +43,11 @@ def getData(lakeName, dayOfYear, hourGMT):
 	day = dayOfYear
 	hour = hourGMT
 
-	# url = "https://tds.glos.us/thredds/dodsC/glos/glcfs/"+lake+"/fcfmrc-2d/files/"+lake[0]+"2014"+day+hour+".out1.nc"
+	url = "https://tds.glos.us/thredds/dodsC/glos/glcfs/"+lake+"/fcfmrc-2d/files/"+lake[0]+"2014"+day+hour+".out1.nc"
 
-	url = "https://noaa-data/"+lake[0]+"2014"+day+hour+".out1.nc"
+
+	#LOCAL
+	# url = "https://noaa-data/"+lake[0]+"2014"+day+hour+".out1.nc"
 
 	dictData = {}
 
@@ -83,7 +85,7 @@ def completeLakes(ont,sup,hur,eri,mic):
 
 	print "Writing Combined Lakes..."
 
-	for topo in lake1['z']:
+	for topo in ont['z']:
 
 		fig = plt.figure(frameon=False)
 
