@@ -1,0 +1,11 @@
+=== Research and Calculations on Data Structure ===
+
+Grid {
+     ARRAY:
+        Float32 v_wind[time1 = 1][isobaric2 = 39][y = 428][x = 614];
+     MAPS:
+        Int32 time1[time1 = 1];
+        Float64 isobaric2[isobaric2 = 39];
+        Float64 y[y = 428];
+        Float64 x[x = 614];
+    } v_wind;
