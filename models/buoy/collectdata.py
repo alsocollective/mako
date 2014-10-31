@@ -40,7 +40,7 @@ def getbouydata(id):
 	out["contents"] = parseContents(out["contents_nonparse"])
 	return out
 
-location = ['45008','45149','45137','45143','45132','45167','45142','45159','45012','45135','45003']
+location = ['45008','45149','45137']#,'45143','45132','45167','45142','45159','45012','45135','45003']
 
 out = []
 for loc in location:
