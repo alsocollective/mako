@@ -1,0 +1,31 @@
+html,body{
+	padding: 0;
+	margin: 0;
+	background: #ccc;
+}
+
+#wrapper{
+	width:65%;
+	max-width:900px;
+	margin: 0 auto;
+	background: #fff;
+}
+
+
+.bohdanslider{
+	height: 50px;
+	width: 100%;
+	position: relative;
+	border: solid 1px black
+}
+.bohdanslider .circle{
+	width: 50px;
+	height: 50px;
+	background-color: #000;
+	position: absolute;
+	left: 50%;
+	top: 0;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+}
