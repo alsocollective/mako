@@ -9,3 +9,53 @@ Grid {
         Float64 y[y = 428];
         Float64 x[x = 614];
     } v_wind;
+
+lat, lon
+top left 44.226479, -81.737386
+bottom left 44.089533, -81.832143
+bottom right 44.054506, -81.413289
+top right 44.312032, -81.374837
+
+NAM 12km
+WRAMS 8km Great Lakes (Premium)
+GFS 0.5 Deg
+NAM 5km
+CMC 0.6 Deg
+WRF 5km
+
+
+http://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_hd.pl?dir=%2Fgfs.2014100118%2Fmaster
+
+
+
+
+== Meh ==
+http://www.windfinder.com/help#forecast
+http://www.windfinder.com/help#forecast
+http://www.windalert.com/map#43.688,-78.285,8,1,52779,2
+
+http://www.ndbc.noaa.gov/
+http://www.ndbc.noaa.gov/station_page.php?station=45008
+http://www.ndbc.noaa.gov/station_history.php?station=45008
+http://www.hotswell.com/
+
+
+== Science Sources ==
+
+http://nomads.ncdc.noaa.gov/data.php?name=access#hires_weather_datasets
+http://nomads.ncdc.noaa.gov/thredds/dodsC/nam218/201410/20141031/nam_218_20141031_0000_000.grb.html
+
+
+== Website ==
+
+https://shop.sitka.ca/login.php?action=create_account#
+http://www.finisterreuk.com/cws/wetsuit.html
+http://www.muttonheadstore.com/pages/mountainhigh
+http://www.filson.com/
+http://hypebeast.com/2014/10/facebook-unveils-its-10-year-plan
+http://www.samuji.com/t/categories/fall-2014
+http://www.stonefoxbride.com/
+http://pitchzine.com/NICOLAS-POLLI
+http://www.theinertia.com/category/travel/
+http://www.canopycanopycanopy.com/contents/dog_years
+http://www.hoodbyair.com/store

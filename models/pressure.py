@@ -9,6 +9,7 @@ import scipy.ndimage as ndimage
 import os, errno
 import simplejson as json
 import matplotlib.colors as col
+# import pygrib
 
 # Multithreading would be a good bet when collecting data
 
@@ -24,12 +25,14 @@ def getData():
 
 	print cl.OKBLUE+"Getting Data..."+cl.ENDC
 
-	url = "http://nomads.ncdc.noaa.gov/thredds/dodsC/nam218/201410/20141030/nam_218_20141030_0000_084.grb"
+	#url = "http://nomads.ncdc.noaa.gov/thredds/dodsC/nam218/201410/20141030/nam_218_20141030_0000_084.grb"
 
-	#url = "http://dods.ndbc.noaa.gov/thredds/dodsC/data/stdmet/45003/45003h2014.nc"
+	#url = "http://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_hd.pl?file=gfs.t18z.mastergrb2f00&var_GUST=on&var_V-GWD=on&subregion=&leftlon=0&rightlon=360&toplat=90&bottomlat=-90&dir=%2Fgfs.2014100118%2Fmaster"
 
-	#LOCAL
-	# url = "https://noaa-data/"+lake[0]+"2014"+day+hour+".out1.nc"
+	#url = "http://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/gfs.2014103112/WAFS_blended_2014103112f36.grib2"
+
+	url = "http://nomads.ncdc.noaa.gov/thredds/dodsC/nam218/201410/20141031/nam_218_20141031_0000_000.grb"
+
 
 	dictData = {}
 
@@ -41,21 +44,40 @@ def getData():
 	except RuntimeError:
 		print cl.FAIL+"--------------\nFile not found\n--------------"+cl.ENDC
 
+
 	#Retrieve specific variable from dataset
 	x = nc.variables['x']
 	y = nc.variables['y']
-	z = nc.variables['Pressure_surface']
+	z = nc.variables['Surface_wind_gust']
+
+	counter = 0
+
+	print z
+	print "----"
+	print len(z)
+
+	for dap in z:
+
+		print dap
+
+		print len(dap)
+
+		print dap[0]
+
+		counter = counter + 1
+
+	exit()
 
 
 	#z = 0.01*nc.variables['Pressure_reduced_to_MSL'][0]
 
-	dictData['x'] = x[:80]
+	dictData['x'] = x[160:180]
 	dictData['y'] = y[:80]
 
 	print dictData['y'][0]
 
 	exit()
-	
+
 	dictData['z'] = z[:,:80,:80]
 
 	dictData['z'] = ndimage.gaussian_filter(np.ma.masked_invalid(dictData['z']),sigma=0.0005, order=0, mode="nearest", cval=0.05)
