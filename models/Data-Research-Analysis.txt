@@ -29,6 +29,18 @@ http://www.windguru.cz/int/historie.php?model=nam
 
 http://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_hd.pl?dir=%2Fgfs.2014100118%2Fmaster
 
+== Links ==
+http://nomads.ncdc.noaa.gov/data.php?name=access#hires_weather_datasets
+http://nomads.ncdc.noaa.gov/cgi-bin/ncdc-ui/review-confirmed.pl?req_id=7079&action=Confirm+Request&order_email=symon%40alsocollective.com
+http://nomads.ncdc.noaa.gov/thredds/dodsC/nam218/201410/20141031/nam_218_20141031_0000_000.grb.html
+http://nomads.ncdc.noaa.gov/thredds/dodsC/nam218/201410/20141030/nam_218_20141030_0000_084.grb.html
+http://forecast.weather.gov/MapClick.php?lat=36.472940694658405&lon=-94.32668914468752&site=all&smap=1#.VFK7sfTF-IA
+http://forecast.weather.gov/MapClick.php?lat=46.74723&lon=-89.34593220339&unit=0&lg=english&FcstType=digital
+http://graphical.weather.gov/sectors/uppermissvly.php?element=MaxT
+http://forecast.weather.gov/MapClick.php?lat=46.74723&lon=-89.34593220339&unit=0&lg=english&FcstType=dwml
+http://dods.ndbc.noaa.gov/thredds/dodsC/data/stdmet/45003/45003h2014.nc.html
+http://forecast.weather.gov/MapClick.php?w3=sfcwind&w3u=2&w13u=0&w16u=1&pqpfhr=6&psnwhr=6&AheadHour=10&Submit=Submit&FcstType=digital&textField1=46.74723&textField2=-89.34593&site=all&unit=0&dd=&bw=
+
 
 == Weather API Comparison ==
 http://michaelwelburn.com/2011/11/02/comparing-weather-apis/
