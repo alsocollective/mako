@@ -1,0 +1,114 @@
+<html>
+	<head>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="jquery.nouislider.min.js"></script>
+		<link href="jquery.nouislider.css" rel="stylesheet">
+	</head>
+
+	<script>
+
+	var j = 0;
+
+	$(document).ready(function() {
+		console.log("READY!");
+
+		$(function(){
+
+			$('#slider-step').noUiSlider({
+				start: [ 0 ],
+				step: 1,
+				range: {
+					'min': [0],
+					'max': [119]
+				}
+			});
+			console.log($("#slider-step").val());
+			document.getElementById("m-0").style.visibility = "visible";
+		});
+
+
+		$("#slider-step").on({
+
+			slide: function(){
+				var slideVal = parseInt($(this).val());
+				$("img[style^='visibility: visible']").each(function(){this.style.visibility = "hidden";})
+				document.getElementById("m-"+slideVal).style.visibility = "visible";
+				document.getElementById("hrs").innerHTML = ("h: "+slideVal).toString();
+			},
+			set: function(){
+			},
+			change: function(){
+			}
+		});
+
+        var element = document.getElementById("main");
+
+        for (i=0; i<120; i++) {
+            var d = document.createElement("img");
+            element.appendChild(d);
+            d.style.visibility = "hidden";
+            d.src = "/models/output/ontario/"+i+"-tst.png";
+            d.id = "m-"+i;
+        }
+	});
+
+	</script>
+
+	<style>
+
+		body, html {
+			width: 100%;
+			height: 100%;
+			background-color: #333;
+			color: #eee;
+			font-family: sans-serif;
+			text-align: center;
+			margin: 0;
+			padding: 0;
+		}
+
+		#main {
+			/*position: absolute;*/
+			/*width: 40%;*/
+			/*height: 100%;*/
+			/*opacity: 0.5;*/
+			/*margin: 0;
+			padding: 0;
+
+			background: no-repeat center center fixed; 
+	  		-webkit-background-size: cover;
+	  		-moz-background-size: cover;
+	  		-o-background-size: cover;
+	  		background-size: cover;*/
+		}
+
+		img {
+			width: 60%;
+			height: auto;
+			position: absolute;
+			top:0px;
+			left:0px;
+		}
+
+		#slider {
+			position: fixed;
+			width: 100%;
+			height: 60px;
+			bottom: 0px;
+			left: 0px;
+		}
+
+	</style>
+
+	<body>
+
+		<!-- <h1>STG Demo</h1>
+		<h2 id="hrs"></h2> -->
+
+		<div id="main"></div>
+
+		<div id="slider">
+			<div id="slider-step"></div>
+		</div>
+	</body>
+</html>
