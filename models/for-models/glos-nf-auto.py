@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import matplotlib, pylab
 import numpy as np
 import netCDF4
+import urllib
 import datetime
 import scipy.ndimage as ndimage
 import os, errno
@@ -126,14 +127,14 @@ for dat in G['z']:
 	#fig = plt.figure(figsize=(2.441, 4.195), dpi=30, frameon=False)
 	
 
-	clevs = np.arange(0.0, 10, 0.05)
+	clevs = np.arange(0.0, 10, 1)
 	#clevs = np.arange(0.0, 5, 0.01)
 
 	norm = col.BoundaryNorm(clevs, 256)
 
-	#cs = plt.contourf(G['x'],G['y'],topo,clevs,cmap='bone',norm=norm, vmin=0, vmax=9.14400)
+	cs = plt.contourf(G['x'],G['y'],topo,clevs,cmap='bone',norm=norm, vmin=0, vmax=9.14400)
 	
-	cs = plt.contour(G['x'],G['y'],topo,clevs,cmap='jet', linewidths=0.5)
+	#cs = plt.contour(G['x'],G['y'],topo,clevs,cmap='jet', linewidths=0.5)
 
 	#fig.spines['top'].set_visible(False)
 	
@@ -155,7 +156,9 @@ for dat in G['z']:
 	#wvhModel = "%d-"%day +time+"_wv_"+date+".svg"
 	#wvhModel = "%d-"%counter +"%d"%nf(np.amax(G['z'][counter]))+".png"
 
-	wvhModel = "%d-.png"%counter
+	wvhModel = "%d.png"%(counter)
+
+	print 
 
 	fig.savefig('../output/ontario/%d/'%dayof +wvhModel, bbox_inches='tight',transparent=True,pad_inches=0)
 
@@ -170,6 +173,12 @@ for dat in G['z']:
 
 	counter += 1
 
-json.dump(out, glosJson, indent=4)
+#json.dump(out, glosJson, indent=4)
 
 exit()
+
+
+#### ENCODE INTO DATA URI TEST
+
+#import urllib
+#encoded = urllib.quote(open("filename.png", "rb").read().encode("base64"))
