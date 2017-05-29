@@ -9,8 +9,7 @@
 *.gif
 keys.ini
 .DS_Store
-envr/*
-node_modules/
-noaa-data/
+env/*
+node_modules/*
 stk.css
 assets/
